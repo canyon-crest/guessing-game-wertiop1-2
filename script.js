@@ -62,7 +62,7 @@ function makeGuess() {
   }
   guessCnt++;
   if (guess === num) {
-    msg.textContent = "Correct! It took " + guessCnt + " tries.";
+    msg.textContent = "Correct" + playerName + "! It took " + guessCnt + " tries.";
     updateScore(guessCnt);
     reset();
     return;
