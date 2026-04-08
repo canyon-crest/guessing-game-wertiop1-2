@@ -88,7 +88,7 @@ function makeGuess() {
 
 function giveUp() {
   // Ends the round, sets score to range value, updates all stats
-  updateScore(10000000);
+  updateScore(range);
   reset()
 }
 
