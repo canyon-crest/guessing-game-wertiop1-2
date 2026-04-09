@@ -37,7 +37,7 @@ function play() {
   }
 
 
-  msg.textContent= "Guess a number 1-"+range;
+  msg.textContent= playerName + ", Guess a number 1-"+range;
   num = Math.floor(Math.random() * range) + 1; 
 
 
