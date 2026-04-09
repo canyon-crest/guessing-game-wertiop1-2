@@ -143,7 +143,7 @@ function time() {
   return curTime;
 
 }
-
+date.textContent=time();
 const intervalId = setInterval(()=> {
   date.textContent=time();
 },1000
