@@ -1,4 +1,4 @@
-// Document Elements
+//#region Document Elements
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
@@ -8,26 +8,29 @@ const guessNum = document.getElementById("guess");
 const wins = document.getElementById("wins");
 const avgScores = document.getElementById("avgScore");
 const lb = document.getElementsByName("leaderboard");
+const date = document.getElementById("date");
+//#endregion
 
-
-// prompt name
+//#region prompt name
 let playerName = prompt("What is your name?").toLowerCase();
-playerName[0].toUpperCase();
-console.log(playerName);
+playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1);
+//#endregion
 
-
-
-// initialize variables for guess game
+//#region initialize variables for guess game
 let num = 0;
 let range = 0;
 let guessCnt = 0;
 const scores = [];
 
+let startMs = 0;
+let gameTimes = [];
 
-// Functions
+//#endregion
+
+//#region Functions
 function play() {
   // Starts a new game: generates random answer, enables inputs, records start time
-  
+  startMs = new Date().getTime()
   // Set up
   for (let i=0;i<level.length;i++) {
     if (level[i].checked) {
@@ -62,7 +65,7 @@ function makeGuess() {
   }
   guessCnt++;
   if (guess === num) {
-    msg.textContent = "Correct" + playerName + "! It took " + guessCnt + " tries.";
+    msg.textContent = "Correct " + playerName + "! It took " + guessCnt + " tries.";
     updateScore(guessCnt);
     reset();
     return;
@@ -90,11 +93,6 @@ function giveUp() {
   updateScore(range);
   reset()
 }
-
-function time() {
-  // Returns a formatted date/time string with month name, day suffix, and live time with seconds
-}
-
 function updateScore(score) {
   // Updates wins, average score, and leaderboard after a win or give up
   scores.push(score);
@@ -113,10 +111,8 @@ function updateScore(score) {
       lb[i].textContent = scores[i];
     }
   }
-}
 
-function updateTimers(endMs) {
-  // Calculates round time, updates fastest game and average time
+  updateTimers(new Date().getTime());
 }
 
 function reset() {
@@ -128,7 +124,47 @@ function reset() {
   }
 }
 
-// Event Listeners
+
+function time() {
+  // Returns a formatted date/time string with month name, day suffix, and live time with seconds
+  let now = new Date();
+  let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  let suffix = "";
+  if (now.getDate % 10 == 1) {
+    suffix = "st";
+  } else if (now.getDate % 10 == 2) {
+    suffix = "nd";
+  } else if (now.getDate % 10 == 3) {
+    suffix = "rd";
+  } else {
+    suffix = "th";
+  }
+  let curTime = months[now.getMonth()] +", " + now.getDate() + suffix + ", " + now.getFullYear() + " " + now.getHours() + ":" +now.getMinutes() + ":" + now.getSeconds();
+  return curTime;
+
+}
+
+const intervalId = setInterval(()=> {
+  date.textContent=time();
+},1000
+)
+//#endregion
+function updateTimers(endMs) {
+  let gameTime = endMs - startMs;
+  gameTimes.push(gameTime);
+  let t1 = 0;
+  for (let i = 0; i < gameTimes.length; i++) {
+    t1 += gameTimes[i];
+  }
+  avgTime.textContent = "Average Time: " + gameTime/parseInt(gameTimes.length);
+  gameTimes.sort(function(a,b){return a-b;});
+  fastest.textContent = gameTimes[0];
+}
+
+
+
+//#region Event Listeners
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
+//#endregion
