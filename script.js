@@ -83,7 +83,6 @@ function makeGuess() {
   }
   
 
-
 }
 
 function giveUp() {
