@@ -77,9 +77,9 @@ function makeGuess() {
     hcwText = "cold";
   }
   if (guess < num) {
-    msg.textContent = "Too low! You are " + hcwText + ".";
+    msg.textContent = "Too low! " + playerName + " are " + hcwText + ".";
   } else {
-    msg.textContent = "Too high! You are " + hcwText + ".";
+    msg.textContent = "Too high! " + playerName + " are " + hcwText + ".";
   }
   
 
