@@ -25,12 +25,15 @@ const scores = [];
 let startMs = 0;
 let gameTimes = [];
 
+let totalGames = 0;
 //#endregion
 
 //#region Functions
 function play() {
   // Starts a new game: generates random answer, enables inputs, records start time
   startMs = new Date().getTime()
+
+  totalGames++;
   // Set up
   for (let i=0;i<level.length;i++) {
     if (level[i].checked) {
@@ -40,8 +43,15 @@ function play() {
   }
 
 
-  msg.textContent= playerName + ", Guess a number 1-"+range;
-  num = Math.floor(Math.random() * range) + 1; 
+  if (range === 1000) {
+    msg.textContent= playerName + ", Guess a float 1-"+range;
+    num = Math.random() * range + 1;
+  } else {
+    msg.textContent= playerName + ", Guess a number 1-"+range;
+    num = Math.floor(Math.random() * range) + 1; 
+  }
+  
+
 
 
   playBtn.disabled = true;
@@ -57,7 +67,7 @@ function play() {
 function makeGuess() {
   // Handles a guess: compares to answer, shows feedback, tracks guess count
 
-  let guess = parseInt(guessNum.value);
+  let guess = (range == 1000) ? guessNum.value : parseInt(guessNum.value);
   
   if (isNaN(guess) || guess < 1 || guess > range) {
     msg.textContent = "Please enter a valid number";
@@ -80,9 +90,9 @@ function makeGuess() {
     hcwText = "cold";
   }
   if (guess < num) {
-    msg.textContent = "Too low! " + playerName + " are " + hcwText + ".";
+    msg.textContent = "Too low! " + playerName + " you are " + hcwText + ".";
   } else {
-    msg.textContent = "Too high! " + playerName + " are " + hcwText + ".";
+    msg.textContent = "Too high! " + playerName + " you are " + hcwText + ".";
   }
   
 
@@ -104,6 +114,7 @@ function updateScore(score) {
   console.log(totalScore);
   avgScores.textContent = "Average Score: " + totalScore/parseInt(scores.length);
 
+  winRate.textContent = "Win Rate: " + parseInt(scores.length) * 100 / totalGames + "%";
   scores.sort(function(a,b){return a-b;});
 
   for (let i = 0; i < lb.length; i++) {
@@ -148,7 +159,7 @@ const intervalId = setInterval(()=> {
   date.textContent=time();
 },1000
 )
-//#endregion
+
 function updateTimers(endMs) {
   let gameTime = endMs - startMs;
   gameTimes.push(gameTime);
@@ -156,10 +167,11 @@ function updateTimers(endMs) {
   for (let i = 0; i < gameTimes.length; i++) {
     t1 += gameTimes[i];
   }
-  avgTime.textContent = "Average Time: " + gameTime/parseInt(gameTimes.length);
+  avgTime.textContent = "Average Time: " + (gameTime/parseInt(gameTimes.length))/1000;
   gameTimes.sort(function(a,b){return a-b;});
-  fastest.textContent = gameTimes[0];
+  fastest.textContent = "Fastest Time: " + gameTimes[0] / 100;
 }
+//#endregion
 
 
 
